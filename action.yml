@@ -1,0 +1,16 @@
+name: 'Copy issue'
+description: 'Copy issue to another repository on label'
+inputs:
+  token:  
+    description: 'Github token with repo:all permission'
+    required: true
+  targetRepo:
+    description: 'The repository in which to copy the issue'
+    required: true
+  label:
+    description: 'The label on which to act'
+    default: 'clone'
+    required: false
+runs:
+  using: 'node12'
+  main: 'index.js'
