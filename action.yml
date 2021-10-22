@@ -1,5 +1,5 @@
-name: 'Copy issue'
-description: 'Copy issue to another repository on label'
+name: 'Clone issue'
+description: 'Clone issue to another repository based on label'
 inputs:
   token:  
     description: 'Github token with repo:all permission'
