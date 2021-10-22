@@ -1,14 +1,12 @@
 {
-  "name": "issue-copy",
+  "name": "issue-cloner",
   "version": "1.0.0",
-  "description": "# Configration - label - target - token - description",
+  "description": "Clone github issue based on label",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "dependencies": {
     "@actions/core": "^1.6.0",
     "@actions/github": "^5.0.0"
