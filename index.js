@@ -8,15 +8,15 @@ async function start(){
         const ghToken = core.getInput('token', {required: true});
 
         const octokit = new github.getOctokit(ghToken);
-        const originalIssue= getOriginalIssue(octokit);
-        console.log(originalIssue);
+        const originalIssue = await getOriginalIssue(octokit);
+
         if (!hasLabel(label, originalIssue)){
             console.log(`Label ${label} not present. Will not copy issue`)
             return;
         }
-        const clonedIssue = cloneIssue(octokit, targetRepo, originalIssue)
+        const clonedIssue = await cloneIssue(octokit, targetRepo, originalIssue)
         
-        addComment(originalIssue, clonedIssue)
+        await addComment(octokit, originalIssue, clonedIssue)
         
         console.log(`Issue cloned successfully`);      
       } catch (error) {
@@ -46,15 +46,20 @@ async function cloneIssue(octokit, targetRepo, original){
     const owner = splitted[0];
     const repoName = splitted[1];
     
-    const title = original.title;
-    const body = `Issue cloned from ${original.data.html_url}\n\n${original.data.body}`;
+    const issueRegex = /(?<=^|\s)#\d+(?=\s|$)/g; // #12 as a word in the text
+    let body = original.data.body.replace(issueRegex, (match) => {
+        const issueNumber = match.substr(1);
+        return `https://github.com/${github.context.repo.owner}/${github.context.repo.repo}/issues/${issueNumber}`;
+    });
 
+    body = `Issue cloned from ${original.data.html_url}\n\n${body}`;
+
+    const title = original.data.title;
     const result = await octokit.rest.issues.create({
         owner: owner,
         repo: repoName,
         body: body,
-        title: title,
-        label: original.labels
+        title: title
     });
     return result;
 }
@@ -63,7 +68,7 @@ async function addComment(octokit, originalIssue, clonedIssue){
     const result = await octokit.rest.issues.createComment({
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,
-        issue_number: originalIssue.number,
+        issue_number: originalIssue.data.number,
         body: `Issue cloned to ${clonedIssue.data.html_url}`
     })
     return result;
