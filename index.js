@@ -6,18 +6,23 @@ async function start(){
         const label = core.getInput('label');
         const targetRepo = core.getInput('targetRepo', {required: true});
         const ghToken = core.getInput('token', {required: true});
+        const labelArr = core.getInput('addLabel').split(',').map(label => label.trim());
+        const assignToArr = core.getInput('assignTo').split(',').map(assignee => assignee.trim());
+
 
         const octokit = new github.getOctokit(ghToken);
         const originalIssue = await getOriginalIssue(octokit);
 
         if (!hasLabel(label, originalIssue)){
-            console.log(`Label ${label} not present. Will not copy issue`)
+            console.log(`Label ${label} not present. Will not copy issue`);
             return;
         }
-        const clonedIssue = await cloneIssue(octokit, targetRepo, originalIssue)
         
-        await addComment(octokit, originalIssue, clonedIssue)
+        const clonedIssue = await cloneIssue(octokit, targetRepo, originalIssue, labelArr, assignToArr);
+
+        await addComment(octokit, originalIssue, clonedIssue);
         
+        core.setOutput('issue_url', clonedIssue.data.html_url);  
         console.log(`Issue cloned successfully`);      
       } catch (error) {
         core.setFailed(error.message);
@@ -41,7 +46,7 @@ async function getOriginalIssue(octokit) {
     return issue;
 }
 
-async function cloneIssue(octokit, targetRepo, original){
+async function cloneIssue(octokit, targetRepo, original, labelArr, assignToArr) {
     const splitted = targetRepo.split('/');
     const owner = splitted[0];
     const repoName = splitted[1];
@@ -61,6 +66,25 @@ async function cloneIssue(octokit, targetRepo, original){
         body: body,
         title: title
     });
+
+    if (labelArr.length > 0) {
+        await octokit.rest.issues.addLabels({
+            owner: owner,
+            repo: repoName,
+            issue_number: result.data.number,
+            labels: labelArr
+        });
+    }
+    
+    if (assignToArr.length > 0) {
+        await octokit.rest.issues.addAssignees({
+            owner: owner,
+            repo: repoName,
+            issue_number: result.data.number,
+            assignees: assignToArr
+        });
+    }
+    
     return result;
 }
 
