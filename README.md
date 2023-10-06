@@ -13,13 +13,13 @@ The label that triggers the action. Default `"clone"`.
 ### `token`
 **Required** A GitHub token.
 
-### `addPrefix`
+### `prefix`
 A prefix to append to the title of the cloned issue. Default is an empty string.
 
-### `addLabels`
+### `labels`
 A comma-separated list of labels to add to the cloned issue. Default is an empty string.
 
-### `addAssignees`
+### `asignees`
 A comma-separated list of assignees to add to the cloned issue. Default is an empty string.
 
 
@@ -36,6 +36,7 @@ with:
   label: 'clone'
   targetRepo: 'owner/repo'
   token: ${{ secrets.GITHUB_TOKEN }}
-  addPrefix: 'Bug - '
-  addLabels: 'bug, needs-triage'
-  addAssignees: 'alice,bob'
+  prefix: 'CLONE:'
+  labels: 'bug, needs-triage'
+  asignees: 'alice,bob'
+```
