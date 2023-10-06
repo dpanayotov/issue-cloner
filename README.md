@@ -1,27 +1,36 @@
-# Clone issue to another repository
+# Issue Cloner
 
-Clone an issue to a predefined repository when labeled with a specific label
+This action clones an issue from the current repository to another repository when a specified label is present on the issue.
 
 ## Inputs
 
-### `token`
-
-**Required** Github token with repo:all permissions.
+### `label`
+The label that triggers the action. Default `"bug"`.
 
 ### `targetRepo`
+**Required** The repository to clone the issue to, in the format `owner/repo`.
 
-**Required** The repository in which to clone the issue.
+### `token`
+**Required** A GitHub token.
 
-### `label`
+### `addLabel`
+A comma-separated list of labels to add to the cloned issue. Example: `"label1, label2"`
 
-**Optional** The label on which to react. Default `clone`.
+### `assignTo`
+A comma-separated list of assignees to assign to the cloned issue. Example: `"username1, username2"`
 
-## Example usage
+## Outputs
 
-```yml
+### `issue_url`
+The URL of the cloned issue in the target repository.
+
+## Example Usage
+
+```yaml
 uses: dpanayotov/issue-cloner@v0.2
 with:
-  label: "clone"
-  targetRepo: myorg/myrepo
-  token: ${{ secrets.CLONE_ISSUE_TOKEN }}
-```
+  label: 'bug'
+  targetRepo: 'owner/repo'
+  token: ${{ secrets.GITHUB_TOKEN }}
+  addLabel: 'new label, another label'
+  assignTo: 'username1, username2'
