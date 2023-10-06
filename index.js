@@ -6,6 +6,7 @@ async function start(){
         const label = core.getInput('label');
         const targetRepo = core.getInput('targetRepo', {required: true});
         const ghToken = core.getInput('token', {required: true});
+        const prefixTitle = core.getInput('prefixTitle');
         const labelArr = core.getInput('addLabel').split(',').map(label => label.trim());
         const assignToArr = core.getInput('assignTo').split(',').map(assignee => assignee.trim());
 
@@ -59,7 +60,7 @@ async function cloneIssue(octokit, targetRepo, original, labelArr, assignToArr) 
 
     body = `Issue cloned from ${original.data.html_url}\n\n${body}`;
 
-    const title = original.data.title;
+    const title = prefixTitle + original.data.title;
     const result = await octokit.rest.issues.create({
         owner: owner,
         repo: repoName,
