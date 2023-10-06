@@ -5,7 +5,7 @@ This action clones an issue from the current repository to another repository wh
 ## Inputs
 
 ### `label`
-The label that triggers the action. Default `"bug"`.
+The label that triggers the action. Default `"clone"`.
 
 ### `targetRepo`
 **Required** The repository to clone the issue to, in the format `owner/repo`.
@@ -13,11 +13,15 @@ The label that triggers the action. Default `"bug"`.
 ### `token`
 **Required** A GitHub token.
 
-### `addLabel`
-A comma-separated list of labels to add to the cloned issue. Example: `"label1, label2"`
+### `addPrefix`
+A prefix to append to the title of the cloned issue. Default is an empty string.
 
-### `assignTo`
-A comma-separated list of assignees to assign to the cloned issue. Example: `"username1, username2"`
+### `addLabels`
+A comma-separated list of labels to add to the cloned issue. Default is an empty string.
+
+### `addAssignees`
+A comma-separated list of assignees to add to the cloned issue. Default is an empty string.
+
 
 ## Outputs
 
@@ -27,10 +31,11 @@ The URL of the cloned issue in the target repository.
 ## Example Usage
 
 ```yaml
-uses: dpanayotov/issue-cloner@v0.2
+uses: dpanayotov/issue-cloner@v0.3
 with:
-  label: 'bug'
+  label: 'clone'
   targetRepo: 'owner/repo'
   token: ${{ secrets.GITHUB_TOKEN }}
-  addLabel: 'new label, another label'
-  assignTo: 'username1, username2'
+  addPrefix: 'Bug - '
+  addLabels: 'bug, needs-triage'
+  addAssignees: 'alice,bob'
