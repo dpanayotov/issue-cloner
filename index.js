@@ -60,7 +60,7 @@ async function cloneIssue(octokit, targetRepo, original, addLabels, addAssignees
 
     body = `Issue cloned from ${original.data.html_url}\n\n${body}`;
 
-    const title = addPrefix + original.data.title;
+    const title = !!addPrefix ? `${addPrefix} ${original.data.title}` : original.data.title;
     const result = await octokit.rest.issues.create({
         owner: owner,
         repo: repoName,
@@ -68,7 +68,7 @@ async function cloneIssue(octokit, targetRepo, original, addLabels, addAssignees
         title: title
     });
 
-    if (labelArr.length > 0) {
+    if (addLabels.length > 0) {
         await octokit.rest.issues.addLabels({
             owner: owner,
             repo: repoName,
@@ -77,7 +77,7 @@ async function cloneIssue(octokit, targetRepo, original, addLabels, addAssignees
         });
     }
     
-    if (assignToArr.length > 0) {
+    if (addAssignees.length > 0) {
         await octokit.rest.issues.addAssignees({
             owner: owner,
             repo: repoName,
