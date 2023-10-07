@@ -28,7 +28,7 @@ This action clones an issue from the current repository to another repository wh
 ## Outputs
 
 ### `issue_url`
-The URL of the cloned issue in the target repository.
+The URL of the cloned issue in the target repository, which can be accessed with ${{ steps.<step-id>.outputs.issue_url }} in your workflow file.
 
 ## Example Usage
 
