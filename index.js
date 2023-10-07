@@ -3,7 +3,7 @@ const github = require('@actions/github');;
 
 async function start(){
     try {
-        const label = core.getInput('label');
+        const label = core.getInput('label') || 'clone';
         const targetRepo = core.getInput('targetRepo', {required: true});
         const ghToken = core.getInput('token', {required: true});
 
@@ -24,6 +24,7 @@ async function start(){
         await addComment(octokit, originalIssue, clonedIssue);
         
         core.setOutput('issue_url', clonedIssue.data.html_url);  
+        
         console.log(`Issue cloned successfully`);      
       } catch (error) {
         core.setFailed(error.message);
