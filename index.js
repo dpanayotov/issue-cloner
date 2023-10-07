@@ -3,7 +3,7 @@ const github = require('@actions/github');;
 
 async function start(){
     try {
-        const label = core.getInput('label') || 'clone';
+        const label = core.getInput('label');
         const targetRepo = core.getInput('targetRepo', {required: true});
         const ghToken = core.getInput('token', {required: true});
 
