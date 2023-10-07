@@ -33,7 +33,7 @@ The URL of the cloned issue in the target repository, which can be accessed with
 ## Example Usage
 
 ```yml
-uses: dpanayotov/issue-cloner@v0.2
+uses: dpanayotov/issue-cloner@v0.3
 with:
   label: "clone"
   targetRepo: myorg/myrepo
